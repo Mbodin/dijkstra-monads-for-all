@@ -1,0 +1,16 @@
+CoqExamples/dijkstra.v
+
+-Q Categories Categories
+-Q SM SM
+SM/Base.v
+SM/TypeCatSpecialized.v
+SM/MonadicStructures.v
+
+SM/dlist.v
+SM/SMSyntax.v
+SM/SMExamples.v
+# Needs template-coq to build
+#SM/SMPHOASToDeBruijn.v
+SM/SMExamplesGenerated.v
+SM/SMDenotations.v
+SM/MonadTransformerSTPOC.v
