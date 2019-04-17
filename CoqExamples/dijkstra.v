@@ -1708,3 +1708,101 @@ Section StateHandler.
 
 End StateHandler.
 
+(********************************************************************************)
+(*                                                                              *)
+(*    Functions polymorphic in the Dijkstra monad                               *)
+(*                                                                              *)
+(********************************************************************************)
+
+Section DijkstraMonadPolymorphic.
+  Context W (D:Dijkstra W).
+  Import ListNotations.
+  
+  Section ListMap.
+    Fixpoint list_mapW {A B} (w : A -> W B) (l : list A) : W (list B) :=
+      match l with
+      | [] => ret []
+      | a :: l => bind (w a) (fun b => bind (list_mapW w l) (fun bs => ret (b :: bs)))
+      end.
+
+    Fixpoint list_mapD {A B w} (f:forall a:A, D B (w a)) (l : list A)
+      : D (list B) (list_mapW w l) :=
+      match l with
+      | [] => dret []
+      | a :: l => b <- f a ; bs <- list_mapD f l ; dret (cons b bs)
+      end.
+  End ListMap.
+
+  Section Fold.
+    Context A B (w : A -> B -> W B) (inv : W B) 
+            (Hinv : forall a, omon_order W (bind inv (w a)) inv).
+    Let w' a wb := bind wb (w a).
+    Lemma fold_inv : forall l, omon_order W (fold_right w' inv l) inv.
+    Proof.
+      induction l as [|a l IH] ; simpl.
+      apply preo_refl.
+      simple refine (preo_trans _ _ _ (bind inv (w a)) _ _ _).
+      apply omon_bind. assumption. intros ; apply preo_refl.
+      apply Hinv.
+    Qed.
+
+    Context (unit : D B inv) (f : forall a b, D B (w a b)).
+
+    Fixpoint foldD l : D B (fold_right w' inv l) :=
+      match l with
+      | [] => unit
+      | a :: l => b <- foldD l ; f a b
+      end.
+
+    Definition foldD_inv l := wkn (foldD l) (fold_inv l). 
+      
+  End Fold.
+
+  Section For.
+    Context (start len : nat) (inv : W unit)
+            (Hinv : omon_order W (bind inv (fun _ => inv)) inv).
+
+    Let bounded_nat := { i : nat | start <= i < start + len }.
+
+    Program Fixpoint bseq (len' : nat) (Hlen : len' <= len) : list bounded_nat :=
+      match len' with
+      | 0 => []
+      | S len0 => (exist _ start _) :: bseq len0 _
+      end.
+    Next Obligation. intuition. Qed.
+    Next Obligation. apply le_Sn_le. assumption. Qed.
+
+    Context (Hinv0 : omon_order W (ret tt) inv).
+
+    Program Definition for_inv (f : forall i, start <= i < start + len -> D unit inv)
+      : D unit inv :=
+      foldD_inv bounded_nat unit (fun _ _ => inv) inv _ (wkn (dret tt) Hinv0)
+                (fun 'i _ => f i _) (bseq len _).
+    Next Obligation. exact (proj2_sig i0). Qed.
+      
+  End For.
+
+  Notation "'For' i 'from' start 'to' endc 'using' inv 'do' c 'done'" :=
+    (for_inv start (endc - start) inv _ _ (fun i Hi => c))
+      (at level 0, i ident).
+
+  Program Definition stupid := For i from 0 to 5 using ret tt do dret tt done.  
+  Next Obligation. rewrite monad_law1. apply preo_refl. Qed.
+  Next Obligation. apply preo_refl. Qed.
+
+End DijkstraMonadPolymorphic.
+
+Section ForState.
+
+  Notation "'For' i 'from' start 'to' endc 'using' inv 'do' c 'done'" :=
+    (for_inv _ (StateWP nat) start (endc - start) inv _ _ (fun i Hi => c))
+      (at level 0, i ident).
+
+  Program Definition sum :=
+    For i from 0 to 5 using PrePostWP nat (fun _ => True) (fun s0 s1 => s0 <= s1) do
+        s0 <- get' ; put' (s0 + i) 
+        done.
+  Next Obligation. intuition. Qed.
+  Next Obligation. apply H0. omega. Qed.
+
+End ForState.
