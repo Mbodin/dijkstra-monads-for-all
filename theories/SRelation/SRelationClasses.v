@@ -476,7 +476,7 @@ Section Binary.
    morphism for equivalence (see Morphisms).  It is also sufficient to
    show that [R] is antisymmetric w.r.t. [eqA] *)
 
-  Global Instance partial_order_antisym `(PartialOrder eqA R) : ! Antisymmetric A eqA R.
+  Global Instance partial_order_antisym `(PartialOrder eqA R) : Antisymmetric A eqA R.
   Proof with auto.
     reduce_goal.
     pose proof partial_order_equivalence as poe. do 3 red in poe.
@@ -493,7 +493,7 @@ Hint Extern 3 (PartialOrder (flip _)) => class_apply PartialOrder_inverse : type
 (** The partial order defined by subsrelation and srelation equivalence. *)
 
 Program Instance subsrelation_partial_order :
-  ! PartialOrder (srelation A) srelation_equivalence subsrelation.
+  PartialOrder (@srelation_equivalence A) subsrelation.
 
 Next Obligation.
 Proof.
