@@ -1,5 +1,7 @@
 **/*~
 **/*.vo
+**/*.vok
+**/*.vos
 **/*.glob
 **/.coqdeps.d
 **/*.aux
@@ -16,4 +18,8 @@
 **/*.vrb
 **/*.cut
 Makefile.coq
+.Makefile.coq.d
 Makefile.coq.conf
+/_esy
+/node_modules
+

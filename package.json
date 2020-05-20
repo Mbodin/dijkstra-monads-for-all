@@ -1,0 +1,16 @@
+{
+	"name": "dijkstra-monads-for-all",
+	"version": "1.0",
+	"description": "Coq develpment of the paper: Dĳkstra monads for all",
+	"esy": {
+		"buildEnv": {
+			"DSTROOT": "#{self.install}"
+		},
+		"build": "make",
+		"install": "make install",
+		"buildsInSource": "_build"
+	},
+	"dependencies": {
+		"@opam/coq": ">=8.10"
+	}
+}
