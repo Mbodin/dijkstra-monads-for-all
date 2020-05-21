@@ -12,28 +12,24 @@ Coq development for the paper:
 
 # Prerequisites
 
-This development requires the `master` branch of Coq here:
-https://github.com/coq/coq/commits/master
-(in particular the following commit is known to work: 1c2cfc1f)
-
-It also requires the equations plugin, `master` branch (only for the
-General recursion examples at the end of DijkstraMonadExamples.v;
-comment out if not needed): https://github.com/mattam82/Coq-Equations
-(in particular the following commit is known to work: 20bc9b26)
- 
-These are already installed in our Docker image.
-
+This development requires `esy`.
+It can be installed through:
+```bash
+npm install --global esy@latest
+```
 
 # Step-by-step Guide
 
-Run `make` from this directory to compile all the coq files
+Run `esy` from this directory to compile all the coq files
 (this step is needed for the walkthrough). It should succeed
 displaying only warnings and coq terms.
 
 The file `theories/README.v` provides a step-by-step walkthrough
 that maps the claims of the paper to parts of the Coq development.
 
-The best way to follow along is to go through this file with emacs.
+The best way to follow along is to go through this file with emacs
+within the `esy` environment.  This can be done by typing `esy emacs`
+followed by the wanted file name.
 (emacs and Proof General are installed in our Docker image)
 
 
@@ -134,7 +130,6 @@ denotation of bind is homomorphic, and under this assumption derives
 the full monad transformer (including all the laws) in Coq."
 
 No proof in the developement is admitted.
-(Note: This has changed when porting the project. Do double-check before using.)
 
 # F* development
 
