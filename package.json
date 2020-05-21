@@ -5,28 +5,31 @@
 	"esy": {
 		"buildEnv": {
 			"DESTDIR": "#{self.install}",
-			"COQPATH": "#{coq-equations.lib}/coq/"
+			"COQBIN": "#{@opam/coq.bin}/",
+			"COQLIB": "#{@opam/coq.lib}/coq/",
+			"COQPATH": "#{coq-equations.lib}/coq/user-contrib"
 		},
 		"build": "make",
 		"install": "make install",
 		"buildsInSource": true
 	},
 	"dependencies": {
-		"@opam/coq": "~8.10",
+		"@opam/coq": "~8.11",
 		"coq-equations": "*"
 	},
 	"resolutions": {
 		"coq-equations": {
-			"source": "github:mattam82/Coq-Equations#74f048116242d7fb13cbc554522f02fe270720d2",
+			"source": "github:mattam82/Coq-Equations#136e2babe0399867ed4ddc2e89857d773bc92ddb",
 			"override": {
 				"dependencies": {
-					"@opam/coq": "8.10.1"
+					"@opam/coq": "~8.11"
 				},
 				"buildsInSource": true,
 				"buildEnv": {
 					"HOME": "#{self.target_dir}",
 					"COQBIN": "#{@opam/coq.bin}/",
 					"COQLIB": "#{@opam/coq.lib}/coq/",
+					"COQMF_WINDRIVE": "#{@opam/coq.lib}/coq/",
 					"DESTDIR": "#{self.install}"
 				},
 				"build": [
