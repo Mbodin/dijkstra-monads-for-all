@@ -259,7 +259,8 @@ Section SPropExamplesAndCounterExamples.
   (* Here the problem is more visible, P is in SProp, not in Type so the equality is not well formed *)
   Fail Check forall (P : SProp) (x y : P), x = y.
 
-  (* The goal does not typecheck, but Coq still allows me to try to prove it ??? *)
+  (* The goal does not typecheck, but Coq still allows me to try to prove it. *)
+	(* This is explained in https://coq.github.io/doc/master/refman/addendum/sprop.html#issues-with-non-cumulativity *)
   Goal forall (P : SProp) (x y : P), x = y. Proof. admit. Fail Admitted.
   Abort All.
   

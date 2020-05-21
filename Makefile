@@ -1,8 +1,8 @@
 %: Makefile.coq phony
-	+make -f Makefile.coq $@
+	+export HOME=`pwd`; make -f Makefile.coq $@
 
 all: Makefile.coq
-	+make -f Makefile.coq all
+	+export HOME=`pwd`; make -f Makefile.coq all
 
 clean: Makefile.coq
 	+make -f Makefile.coq clean

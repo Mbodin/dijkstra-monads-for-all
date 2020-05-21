@@ -4,13 +4,37 @@
 	"description": "Coq develpment of the paper: Dĳkstra monads for all",
 	"esy": {
 		"buildEnv": {
-			"DSTROOT": "#{self.install}"
+			"DESTDIR": "#{self.install}",
+			"COQPATH": "#{coq-equations.lib}/coq/"
 		},
 		"build": "make",
 		"install": "make install",
-		"buildsInSource": "_build"
+		"buildsInSource": true
 	},
 	"dependencies": {
-		"@opam/coq": ">=8.10"
+		"@opam/coq": "~8.10",
+		"coq-equations": "*"
+	},
+	"resolutions": {
+		"coq-equations": {
+			"source": "github:mattam82/Coq-Equations#74f048116242d7fb13cbc554522f02fe270720d2",
+			"override": {
+				"dependencies": {
+					"@opam/coq": "8.10.1"
+				},
+				"buildsInSource": true,
+				"buildEnv": {
+					"HOME": "#{self.target_dir}",
+					"COQBIN": "#{@opam/coq.bin}/",
+					"COQLIB": "#{@opam/coq.lib}/coq/",
+					"DESTDIR": "#{self.install}"
+				},
+				"build": [
+					["coq_makefile", "-f", "_CoqProject", "-o", "Makefile.coq", "-install", "user", "DESTDIR", "=", "#{self.install}"],
+					["make", "-j2"],
+					["make", "install"]
+				]
+			}
+		}
 	}
 }

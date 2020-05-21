@@ -1,3 +1,6 @@
+Note: This is a clone of [this repository](https://gitlab.inria.fr/kmaillar/dijkstra-monads-for-all).
+You may prefer checking the original first.
+
 # Dijkstra Monads for All
 
 Coq development for the paper:
