@@ -495,7 +495,7 @@ Section ICTermToRel.
     - intros σ x ; apply (X x).
     - intro σ.
       destruct c ; destruct H ; apply (IHct σ).
-    - intros σ ;
+    - intros σ ; rewrite /map_subst;
         erewrite 2!Substitution.dlookup_dmap ;
           apply rel.
     - intros σ x1 x2 r.
@@ -528,7 +528,7 @@ Section ICTermToSRel.
     - intros σ x ; apply (H x).
     - intro σ.
       destruct c ; destruct H ; apply (IHct σ).
-    - intros σ ;
+    - intros σ ; rewrite /map_subst;
         erewrite 2!Substitution.dlookup_dmap ;
           apply srel.
     - intros σ x1 x2 r.

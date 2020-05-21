@@ -134,6 +134,7 @@ denotation of bind is homomorphic, and under this assumption derives
 the full monad transformer (including all the laws) in Coq."
 
 No proof in the developement is admitted.
+(Note: This has changed when porting the project. Do double-check before using.)
 
 # F* development
 

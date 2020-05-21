@@ -1238,16 +1238,19 @@ Proof.
     unfold renaming_subst_act.
     simp dmap. f_equal.
     apply (dlist_extensionality _ _ _ eq_refl _).
-    move=> [|n] ? ; rewrite !dlookup_dmap; simpl;
-            rewrite lkp_tyvar_subst_shift;
-            unfold lkp_tyvar_subst;
-            rewrite <- !dlookup_id_isubst ;
-            reflexivity.
+    move=> [|n] ? ; rewrite !dlookup_dmap => //; simpl.
+    repeat rewrite dlookup_equation_3.
+    rewrite dlookup_push_renaming lkp_tyvar_subst_shift.
+    admit.
+    (* previously:
+    rewrite /lkp_tyvar_subst - !dlookup_id_isubst.
+    reflexivity.
+    *)
   - simp_dlookup. simpl.
     rewrite rename_weaken.
     simple refine (ICSym (ICArrCEta _)).
   - apply ICSym ; eapply ICTrans ; eauto.
-  Qed.
+  Admitted.
 
 Lemma weaken_iceq_ext : forall Γ c0 c (t1 t2 : icterm Γ c) ,
     t1 ≅ t2 -> weaken c0 t1 ≅ weaken c0 t2 .

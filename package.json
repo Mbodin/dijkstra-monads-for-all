@@ -5,6 +5,7 @@
 	"esy": {
 		"buildEnv": {
 			"DESTDIR": "#{self.install}",
+			"COQMF_WINDRIVE": "#{@opam/coq.lib}/coq/",
 			"COQBIN": "#{@opam/coq.bin}/",
 			"COQLIB": "#{@opam/coq.lib}/coq/",
 			"COQPATH": "#{coq-equations.lib}/coq/user-contrib"

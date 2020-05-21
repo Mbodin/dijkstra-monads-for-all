@@ -62,7 +62,7 @@ Module DList(C : Ctx).
 
   Lemma dmap_id {B l} (v:dlist B l) : dmap iid v = v.
   Proof.
-    funelim (dmap iid v) ; [reflexivity | f_equal ; assumption].
+    funelim (dmap iid v) ; [ reflexivity | rewrite dmap_equation_2 ; f_equal ; assumption ].
   Qed.
 
   Lemma dmap_compose {B1 B2 B3 l} (v : dlist B1 l) f g :
@@ -88,9 +88,9 @@ Module DList(C : Ctx).
     remove (insert n x l) n = l.
   Proof.
     funelim (insert n x l) ; simp remove.
-    reflexivity.
-    reflexivity.
-    f_equal ; assumption.
+    - reflexivity.
+    - reflexivity.
+    - rewrite insert_equation_3. simp remove. f_equal. assumption.
   Defined.
 
 
@@ -128,7 +128,7 @@ Module DList(C : Ctx).
     funelim (remove l n).
     - enough sEmpty as [] ; inversion H.
     - simp lookup ; simp insert ; reflexivity.
-    - simp lookup ; simp insert ; f_equal. apply H.
+    - rewrite remove_equation_3. simp lookup ; simp insert ; f_equal. apply H.
   Qed.
 
 
@@ -360,8 +360,8 @@ Module DList(C : Ctx).
     @dmap B1 B2 (l1 ++ l2) f (dapp v1 v2) = dapp (dmap f v1) (dmap f v2).
   Proof.
     funelim (dapp v1 v2) ; simp dmap ; simp dapp.
-    reflexivity.
-    f_equal ; apply H.
+    - reflexivity.
+    - rewrite dmap_equation_2. f_equal ; apply H.
   Qed.
 
   Section FromSection.

@@ -101,7 +101,7 @@ Section ToOrderedMonad.
     move=> ? ? ?.
     simpl.
     unfold lift_carrier.
-    rewrite <- (pf (ctype_alg M (icM C A))).
+    rewrite /CM -(pf (ctype_alg M (icM C A))).
     apply oalgstr_mon.
     red. move=> R Hret Hmon Hbind.
     apply Hmon.
@@ -295,8 +295,6 @@ Section LiftNatural.
     rewrite monad_morphism_natural.
     rewrite map_functorial.
     reflexivity.
-    simpl.
-    rewrite monad_morphism_natural map_functorial //.
   Qed.
 End LiftNatural.
 
