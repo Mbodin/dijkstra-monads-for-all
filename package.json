@@ -8,7 +8,7 @@
 			"COQMF_WINDRIVE": "#{@opam/coq.lib}/coq/",
 			"COQBIN": "#{@opam/coq.bin}/",
 			"COQLIB": "#{@opam/coq.lib}/coq/",
-			"COQPATH": "#{coq-equations.lib}/coq/user-contrib"
+			"COQPATH": "#{coq-equations.install}/user-contrib"
 		},
 		"build": "make",
 		"install": "make install",
@@ -34,7 +34,7 @@
 					"DESTDIR": "#{self.install}"
 				},
 				"build": [
-					["coq_makefile", "-f", "_CoqProject", "-o", "Makefile.coq", "-install", "user", "DESTDIR", "=", "#{self.install}"],
+					["coq_makefile", "-f", "_CoqProject", "-o", "Makefile.coq", "-install", "user", "DESTDIR", "=", "#{self.install}", "COQMF_WINDRIVE", "=", "#{@opam/coq.lib}/coq"],
 					["make", "-j2"],
 					["make", "install"]
 				]
