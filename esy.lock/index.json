@@ -1,5 +1,5 @@
 {
-  "checksum": "bc4e8d48233300d0a83c51447d3de1b5",
+  "checksum": "f19c556936c7e81d4b1b1f479e86e4b7",
   "root": "dijkstra-monads-for-all@link-dev:./package.json",
   "node": {
     "ocaml@4.10.0@d41d8cd9": {
@@ -27,14 +27,14 @@
       },
       "overrides": [],
       "dependencies": [
-        "coq-equations@github:mattam82/Coq-Equations#136e2babe0399867ed4ddc2e89857d773bc92ddb@f3e92f93",
+        "coq-equations@github:mattam82/Coq-Equations#136e2babe0399867ed4ddc2e89857d773bc92ddb@271eaa79",
         "@opam/coq@opam:8.11.1@81a5947e"
       ],
       "devDependencies": []
     },
-    "coq-equations@github:mattam82/Coq-Equations#136e2babe0399867ed4ddc2e89857d773bc92ddb@f3e92f93": {
+    "coq-equations@github:mattam82/Coq-Equations#136e2babe0399867ed4ddc2e89857d773bc92ddb@271eaa79": {
       "id":
-        "coq-equations@github:mattam82/Coq-Equations#136e2babe0399867ed4ddc2e89857d773bc92ddb@f3e92f93",
+        "coq-equations@github:mattam82/Coq-Equations#136e2babe0399867ed4ddc2e89857d773bc92ddb@271eaa79",
       "name": "coq-equations",
       "version":
         "github:mattam82/Coq-Equations#136e2babe0399867ed4ddc2e89857d773bc92ddb",
@@ -51,9 +51,7 @@
           "buildEnv": {
             "HOME": "#{self.target_dir}",
             "COQBIN": "#{@opam/coq.bin}/",
-            "COQLIB": "#{@opam/coq.lib}/coq/",
-            "COQMF_WINDRIVE": "#{@opam/coq.lib}/coq/",
-            "DESTDIR": "#{self.install}"
+            "COQLIB": "#{@opam/coq.lib}/coq/"
           },
           "build": [
             [

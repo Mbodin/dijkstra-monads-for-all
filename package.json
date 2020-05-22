@@ -4,11 +4,10 @@
 	"description": "Coq develpment of the paper: Dĳkstra monads for all",
 	"esy": {
 		"buildEnv": {
-			"DESTDIR": "#{self.install}",
-			"COQMF_WINDRIVE": "#{@opam/coq.lib}/coq/",
 			"COQBIN": "#{@opam/coq.bin}/",
 			"COQLIB": "#{@opam/coq.lib}/coq/",
-			"COQPATH": "#{coq-equations.install}/user-contrib"
+			"COQPATH": "#{coq-equations.install}/user-contrib",
+			"COQMAKEFILEOPTIONS": "DESTDIR = '#{self.install}' COQMF_WINDRIVE = '#{@opam/coq.lib}/coq'"
 		},
 		"build": "make",
 		"install": "make install",
@@ -29,14 +28,12 @@
 				"buildEnv": {
 					"HOME": "#{self.target_dir}",
 					"COQBIN": "#{@opam/coq.bin}/",
-					"COQLIB": "#{@opam/coq.lib}/coq/",
-					"COQMF_WINDRIVE": "#{@opam/coq.lib}/coq/",
-					"DESTDIR": "#{self.install}"
+					"COQLIB": "#{@opam/coq.lib}/coq/"
 				},
 				"build": [
-					["coq_makefile", "-f", "_CoqProject", "-o", "Makefile.coq", "-install", "user", "DESTDIR", "=", "#{self.install}", "COQMF_WINDRIVE", "=", "#{@opam/coq.lib}/coq"],
-					["make", "-j2"],
-					["make", "install"]
+					[ "coq_makefile", "-f", "_CoqProject", "-o", "Makefile.coq", "-install", "user", "DESTDIR", "=", "#{self.install}", "COQMF_WINDRIVE", "=", "#{@opam/coq.lib}/coq" ],
+					[ "make", "-j2" ],
+					[ "make", "install" ]
 				]
 			}
 		}

@@ -1,3 +1,6 @@
+
+COQMAKEFILEOPTIONS ?= INSTALLDEFAULTROOT = "."
+
 %: Makefile.coq phony
 	+export HOME=`pwd`; make -f Makefile.coq $@
 
@@ -9,7 +12,7 @@ clean: Makefile.coq
 	rm -f Makefile.coq
 
 Makefile.coq: _CoqProject Makefile
-	coq_makefile -f _CoqProject -o Makefile.coq INSTALLDEFAULTROOT = "."
+	coq_makefile -f _CoqProject -o Makefile.coq $(COQMAKEFILEOPTIONS)
 
 _CoqProject: ;
 
@@ -18,3 +21,4 @@ Makefile: ;
 phony: ;
 
 .PHONY: all clean phony
+
