@@ -25,12 +25,12 @@ Section MonotoneContinuationsMonad.
     { f : (X -> R) -> R ≫ SProper (pointwise_srelation X Rrel s==> Rrel) f}.
 
   Program Definition MonoCont_ret A (a:A) : MonoContCarrier A :=
-    Sexists _ (fun k => k a) _.
+    ⦑ fun k => k a ⦒.
   Next Obligation. cbv; auto. Qed.
 
   Program Definition MonoCont_bind A B (m : MonoContCarrier A)
           (f : A -> MonoContCarrier B) : MonoContCarrier B :=
-    Sexists _ (fun k => Spr1 m (fun a => Spr1 (f a) k)) _.
+    ⦑ fun k => Spr1 m (fun a => Spr1 (f a) k) ⦒.
   Next Obligation.
     cbv ; intuition. apply (Spr2 m).
     intros a ; apply (Spr2 (f a)) ; assumption.
@@ -66,8 +66,8 @@ Section MonoContSProp.
   Global Program Instance MonoContSProp_aa A : aa (@omon_rel MonoContSProp A)
     :=
       @mkAa _ _
-            (fun pre w => Sexists _ (fun p => pre -> Spr1 w p) _)
-            (fun pre w => Sexists _ (fun p => pre s/\ Spr1 w p) _)
+            (fun pre w => ⦑ fun p => pre -> Spr1 w p ⦒)
+            (fun pre w => ⦑ fun p => pre s/\ Spr1 w p ⦒)
             _ _ _. 
   Solve All Obligations with cbv ; intuition ; try (eapply (Spr2 w) ; eauto).
 
@@ -80,7 +80,7 @@ Section PrePostSpec.
   (* Generic pre-/post-conditions for the W^Pure specification monad. *)
   Program Definition PrePostSpec {A} (P : SProp) (Q : A -> SProp) :
     MonoContSProp A :=
-    Sexists _ (fun (Z : A -> SProp) => P s/\ forall a, Q a -> Z a) _.
+    ⦑ fun (Z : A -> SProp) => P s/\ forall a, Q a -> Z a ⦒.
   Next Obligation. cbv ; intuition eauto. Qed.
 
   Section Ran.
@@ -91,7 +91,7 @@ Section PrePostSpec.
     Definition MonoContAlongPrePost_ran : ran w (PrePostSpec pre post).
     Proof.
       unshelve econstructor.
-      refine (fun b => Sexists _ (fun p => post b s/\ Spr1 w p) _).
+      refine (fun b => ⦑ fun p => post b s/\ Spr1 w p ⦒).
       cbv ; intuition ; eapply (Spr2 w _) ; eauto.
       split.
       cbv. intros ; split.
@@ -165,16 +165,15 @@ Section UpdateSpecMonad.
     { f : (A -> M -> SProp) -> X -> SProp ≫
       SProper (@dom_rel A s==> cod_rel) f}. 
   Program Definition retWUpd A (a : A) : WUpd A :=
-    Sexists _ (fun p xx => p a (e M)) _.
+    ⦑ fun p xx => p a (e M) ⦒.
   Next Obligation. move=> ? ? H ? ; apply H. Qed.
 
   Program Definition bindWUpd A1 A2
           (wm : WUpd A1) (wf : A1 -> WUpd A2)
     : WUpd A2 :=
-    Sexists _
-            (fun p x => Spr1 wm (fun a m => Spr1 (wf a)
-                                              (fun a m' => p a (m'⋅m)) 
-                                              (m ⧕  x)) x) _.
+    ⦑ fun p x => Spr1 wm (fun a m => Spr1 (wf a)
+                                       (fun a m' => p a (m'⋅m)) 
+                                       (m ⧕  x)) x ⦒.
   Next Obligation.
     move=> ? ? H ? ; apply (Spr2 wm)=> a m ; apply (Spr2 (wf a))=> ? ? ; apply H.
   Qed.
@@ -229,10 +228,10 @@ Section UpdateSpecMonad.
     Global Program Instance UpdSpecFromLaws_aa A : aa (@omon_rel UpdSpec A)
       :=
         @mkAa _ _
-              (fun pre w => Sexists _ (fun p x => pre -> Spr1 w p x) _)
-              (fun pre w => Sexists _ (fun p x => pre s/\ Spr1 w p x) _)
+              (fun pre w => ⦑ fun p x => pre -> Spr1 w p x ⦒)
+              (fun pre w => ⦑ fun p x => pre s/\ Spr1 w p x ⦒)
               _ _ _. 
-    Solve All Obligations with cbv ; intuition ; try (eapply (Spr2 w) ; eauto).
+    Solve All Obligations with cbv ; intuition ; eapply (Spr2 w) ; eauto.
 
   End AssertAssume.
 
@@ -267,13 +266,12 @@ Section MonotonicRelations.
   Definition MR X := { r : MR_base X ≫ SProper (@MR_base_rel X) r }.
 
   Program Definition retMR A a : MR A :=
-    Sexists _ (fun pre post => Sexists _ (pre -> Spr1 (post a)) _) _.
+    ⦑ fun pre post => ⦑ pre -> Spr1 (post a) ⦒ ⦒.
   Next Obligation. cbv ; intuition. Qed.
   Next Obligation. cbv ; intuition. Qed.
 
   Program Definition bindMR A B (m:MR A) (f: A -> MR B) : MR B :=
-      Sexists _ (fun pre post =>
-                   Sexists _ (Spr1 (Spr1 m pre (fun a => Sexists _ (Spr1 (Spr1 (f a) pre post)) _))) _) _.
+    ⦑ fun pre post => ⦑ Spr1 (Spr1 m pre (fun a => ⦑ Spr1 (Spr1 (f a) pre post) ⦒)) ⦒ ⦒.
   Next Obligation.
     split ; move=> ? //=.
     match goal with | [|- _ ?X] => apply (Spr2 X) ;assumption end.
@@ -372,7 +370,7 @@ Module PrePost.
   Import SPropAxioms.
   Import FunctionalExtensionality.
 
-  Definition PP X := SProp  × (X -> SProp).
+  Definition PP X := SProp × (X -> SProp).
 
   Definition PP_ret : forall A, A -> PP A := fun _ x => ⟨ sUnit, fun y => y ≡ x ⟩.
 
@@ -455,7 +453,7 @@ Module PrePost.
     Qed.
 
     Program Definition PPSpecRan : ran w' w :=
-      Sexists _ PPSpec_ran _.
+      ⦑ PPSpec_ran ⦒.
     Next Obligation.
       split ; [exact PPSpec_ran_valid | exact PPSpec_ran_universal].
     Qed.
@@ -473,7 +471,7 @@ End PrePost.
 
 
 
-Module  StrongestPostcondition.
+Module StrongestPostcondition.
   Import SPropNotations.
   Import SPropAxioms.
   Import FunctionalExtensionality.
@@ -484,12 +482,12 @@ Module  StrongestPostcondition.
                        forall (p1 p2 : SProp) x, (p1 -> p2) -> f p1 x -> f p2 x}.
 
   Program Definition SP_ret A (a:A) : SP A :=
-    Sexists _ (fun p y => @mkOver _ (p s/\ a ≡ y) _) _.
+    ⦑ fun p y => @mkOver _ (p s/\ a ≡ y) _ ⦒.
   Next Obligation. destruct H ; assumption. Qed.
   Next Obligation. destruct H0 ; split ; auto. Qed.
 
   Program Definition SP_bind A B (m:SP A) (f : A -> SP B) : SP B :=
-    Sexists _ (fun p y => @mkOver _ (s∃ x, Spr1 (f x) (Spr1 m p x) y) _) _.
+    ⦑ fun p y => @mkOver _ (s∃ x, Spr1 (f x) (Spr1 m p x) y) _ ⦒.
   Next Obligation.
     destruct H as [x0 H0].
     exact (@over _ (Spr1 m p x0) (@over _ (Spr1 (f _) _ _) H0)).
@@ -564,7 +562,7 @@ Section Adjunctions.
     fun a => nsnd pp a.
 
   Lemma pred_pp_adjunction : forall A post (pp : PPSpecMonad A),
-   pred2pp post ≤[PPSpecMonad] pp  s<-> post ≤[PredOM] pp2pred pp.
+   pred2pp post ≤[PPSpecMonad] pp s<-> post ≤[PredOM] pp2pred pp.
   Proof.
     move=> A post pp ; cbv ; split ; intuition.
   Qed.
@@ -574,7 +572,7 @@ Section Adjunctions.
   Definition wp2pp A (w : MonoCont A) : PPSpecMonad A :=
     ⟨Spr1 w (fun _ => sUnit), fun x =>  forall p, Spr1 w p -> p x⟩.
   Program Definition pp2wp A (pp : PPSpecMonad A) : MonoCont A :=
-    Sexists _ (fun post => nfst pp s/\ (forall x, nsnd pp x -> post x)) _.
+    ⦑ fun post => nfst pp s/\ (forall x, nsnd pp x -> post x) ⦒.
   Next Obligation. cbv ; intuition. Qed.
 
   Lemma wp_pp_adjunction : forall A pp (w : MonoCont A),
@@ -592,7 +590,7 @@ Section Adjunctions.
 
 
   Program Definition wp2mr A (w : MonoCont A) : MRSpec A :=
-    Sexists _ (fun pre post => Sexists _ (pre -> Spr1 w (fun a => Spr1 (post a))) _ ) _.
+    ⦑ fun pre post => ⦑ pre -> Spr1 w (fun a => Spr1 (post a)) ⦒ ⦒.
   Next Obligation. cbv ; intuition. Qed.
   Next Obligation.
     cbv ; intuition.
@@ -601,11 +599,11 @@ Section Adjunctions.
 
   Program Definition assuming (pre : SProp) A (post : A -> SProp) (x:A) :
     SPropAssuming pre :=
-    Sexists _ (pre -> post x) _.
+    ⦑ pre -> post x ⦒.
   Next Obligation. cbv ; intuition. Qed.
 
   Program Definition mr2wp A (mr:MRSpec A) : MonoCont A :=
-    Sexists _ (fun p => s∃ (pre:SProp), Spr1 (Spr1 mr pre (assuming pre p)) s/\ pre) _.
+    ⦑ fun p => s∃ (pre:SProp), Spr1 (Spr1 mr pre (assuming pre p)) s/\ pre ⦒.
   Next Obligation.
     cbv ; intuition.
     move: H0 => [pre [Hmr ?]] ; exists pre ; intuition.
@@ -624,7 +622,7 @@ Section Adjunctions.
   Qed.
 
     
-   Import StrongestPostcondition.
+  Import StrongestPostcondition.
 
 
   Definition sp2pp A (sp:ForwardPredTransformer A) : PPSpecMonad A :=
@@ -634,7 +632,7 @@ Section Adjunctions.
 
   Program Definition pp2sp0 A (pp : PPSpecMonad A) : ForwardPredTransformer A :=
     let sp pre x := pre s/\ (nfst pp -> nsnd pp x) in
-    Sexists _ (fun pre x => @mkOver _ (sp pre x) _) _.
+    ⦑ fun pre x => @mkOver _ (sp pre x) _ ⦒.
   Next Obligation. destruct H ; assumption. Qed.
   Next Obligation. move: H0 => [Hpre Hpost] ; split ; auto. Qed.
 
@@ -643,7 +641,7 @@ Section Adjunctions.
         forall (sp: ForwardPredTransformer A),
           (forall x pre', pre' s/\ nsnd pp x -> Spr1 sp pre' x) ->
               Spr1 sp pre x in
-    Sexists _ (fun pre x => @mkOver _ (sp pre x) _) _.
+    ⦑ fun pre x => @mkOver _ (sp pre x) _ ⦒.
   Next Obligation.
     move: (H (pp2sp0 pp)) => H0.
     apply (fun f => over (H0 f)). 
@@ -701,7 +699,7 @@ Section Adjunctions.
 
   Program Definition sp2mr A (sp : ForwardPredTransformer A)
     : MRSpec A :=
-    Sexists _ (fun pre post => Sexists _ (forall a, Spr1 sp pre a -> Spr1 (post a)) _) _.
+    ⦑ fun pre post => ⦑ forall a, Spr1 sp pre a -> Spr1 (post a) ⦒ ⦒.
   Next Obligation.
     cbv ; intuition.
     apply (Spr2 (post a)).
@@ -714,11 +712,11 @@ Section Adjunctions.
 
   Program Definition mr2sp A (mr : MRSpec A)
     : ForwardPredTransformer A :=
-    Sexists _ (fun pre a => @mkOver _ (pre s/\ forall post, Spr1 (Spr1 mr pre post) -> Spr1 (post a)) _)_.
+    ⦑ fun pre a => @mkOver _ (pre s/\ forall post, Spr1 (Spr1 mr pre post) -> Spr1 (post a)) _ ⦒.
   Next Obligation. destruct H ; assumption. Qed.
   Next Obligation.
     move: H0 => [Hpre Hmr] ; split ; [auto|].
-    move=> post Hpost. simple refine (Hmr (fun a => Sexists _ (Spr1 (post a)) _) _). cbv ; intuition.
+    move=> post Hpost. simple refine (Hmr (fun a => ⦑ Spr1 (post a) ⦒) _). cbv ; intuition.
     move: Hpost ; apply (Spr2 mr) ; cbv ; intuition.
   Qed.
 
@@ -755,7 +753,7 @@ Section WpSpRightKanExtension.
   Context (Hadj : forall A m, wpsp_pairing (θwp A m) (θsp A m)).
 
   Program Definition wp_ran A B (w: MonoCont B) (m: M A) : ran w (θwp A m) :=
-    Sexists _ (fun a => Sexists _ (fun p => Spr1 (θsp A m) (Spr1 w p) a) _) _.
+    ⦑ fun a => ⦑ fun p => Spr1 (θsp A m) (Spr1 w p) a ⦒ ⦒.
   Next Obligation.
     cbv. move=> ? ? H ; apply (Spr2 (θsp A m)) ; apply (Spr2 w)=> //=.
   Qed.

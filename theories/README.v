@@ -30,29 +30,29 @@ Check Div.
 Check Ω.
 
 (* Exceptions, also a free monad parametrized by a type E of exceptions *)
-Check (Exn _).
-Check (raise _).
+Check Exn _.
+Check raise _.
 
 (* State, parametrized by a type S *)
-Check (St _).
-Eval cbv in (St _ _).
+Check St _.
+Eval cbv in St _ _.
 Check get.
 Check put.
 
 (* A version of non-determinism based on predicates *)
 Check NDSet.
-Eval cbv in (NDSet _).
+Eval cbv in NDSet _.
 Check pick_set.
 
 (* Non-determinism, implemented with lists *)
 (* it does not satisfy commutativity and idempotency
    but it has a more computational feeling *)
 Check ListM.
-Eval cbv in (ListM _).
+Eval cbv in ListM _.
 Check pick.
 
 (* IO, a free monad parametrized by the types of Input and Ouput *)
-Check (IO _ _).
+Check IO _ _.
 Check read.
 Check write.
 
@@ -63,13 +63,13 @@ Check write.
 Print OrderedMonad.
 
 Check MonoContSProp.
-Eval cbv in (MonoContSProp _).
-Eval cbv in (_ ≤[MonoContSProp] _).
+Eval cbv in MonoContSProp _.
+Eval cbv in _ ≤[MonoContSProp] _.
 
-Eval cbv in (STCont _ _).
-Eval cbv in (_ ≤[STCont _] _).
+Eval cbv in STCont _ _.
+Eval cbv in _ ≤[STCont _] _.
 
-Eval cbv in (ExnSpec _ _).
+Eval cbv in ExnSpec _ _.
 
 
 (********************************************************************)
@@ -486,7 +486,7 @@ Section IO.
     fun=> ⦑fun post => forall history, post ⟨tt, history⟩⦒.
   Next Obligation. simpl ; intuition. Qed.
 
-  (* COrrectly, the proof fails ... *)
+  (* Correctly, the proof fails ... *)
   Program Definition print_sequence'' : IO unit print_sequence_spec'' :=
     wkn (y <- mustHaveOccurred oup1; write' oup2) _.
   Next Obligation.
@@ -605,12 +605,22 @@ End IOST.
 (*** Basic Specifications Monads  *)
 (********************************************************************)
 
-Eval cbv in (PredOM _).
-Eval cbv in (PrePost.PP _).
-Eval cbv in (StrongestPostcondition.SP _).
-Eval cbv in (MonoContSProp _).
+(* Predicate monad *)
+Eval cbv in PredOM _.
 
+(* Pre/post-condition monad *)
+Eval cbv in PrePost.PPSpecMonad _.
+
+(* Forward predicate transformer monad *)
+Eval cbv in StrongestPostcondition.ForwardPredTransformer _.
+
+(* The smaller type of predicate transformers monotonic with respect to pre. *)
+Eval cbv in MonoContSProp _.
+
+(* Adjunction between Pred and PrePost *)
 Check pred_pp_adjunction.
+
+(* Adjunction between PrePost and a monotonic monad *)
 Check wp_pp_adjunction.
 
 

@@ -28,8 +28,10 @@ The file `theories/README.v` provides a step-by-step walkthrough
 that maps the claims of the paper to parts of the Coq development.
 
 The best way to follow along is to go through this file with emacs
-within the `esy` environment.  This can be done by typing `esy emacs`
-followed by the wanted file name.
+within the `esy` environment:
+```bash
+esy emacs theories/README.v
+```
 (emacs and Proof General are installed in our Docker image)
 
 
